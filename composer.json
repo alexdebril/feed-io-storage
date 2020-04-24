@@ -12,5 +12,8 @@
         "phpunit/phpunit": "^9.1",
         "friendsofphp/php-cs-fixer": "^2.16"
     },
+    "autoload": {
+        "psr-4": {"FeedIo\\Storage\\": "src/Storage"}
+    },
     "license": "MIT"
 }
