@@ -1,4 +1,8 @@
+build:
+	docker-compose build
+	docker-compose run unit-test composer install
+
 test:
 	docker-compose up -d
-	vendor/bin/phpunit
+	docker-compose run unit-test vendor/bin/phpunit
 	docker-compose down

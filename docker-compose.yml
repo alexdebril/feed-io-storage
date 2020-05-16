@@ -5,3 +5,10 @@ services:
         image: mongo
         ports:
             - 27017
+
+    unit-test:
+        build: tests
+        links:
+            - mongo
+        volumes:
+        - .:/src
