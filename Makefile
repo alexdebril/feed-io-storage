@@ -2,7 +2,11 @@ build:
 	docker-compose build
 	docker-compose run unit-test composer install
 
-test:
+start:
 	docker-compose up -d
-	docker-compose run unit-test vendor/bin/phpunit
+
+stop:
 	docker-compose down
+
+test:
+	docker-compose run unit-test vendor/bin/phpunit
