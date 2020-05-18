@@ -10,3 +10,7 @@ stop:
 
 test:
 	docker-compose run unit-test vendor/bin/phpunit
+
+update:
+	docker-compose run unit-test composer update
+

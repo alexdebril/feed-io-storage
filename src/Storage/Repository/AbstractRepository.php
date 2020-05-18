@@ -3,15 +3,12 @@
 
 namespace FeedIo\Storage\Repository;
 
-
-use \UnexpectedValueException;
+use MongoDB\BSON\ObjectIdInterface;
 use MongoDB\Collection;
 use MongoDB\Database;
 
 abstract class AbstractRepository
 {
-    const COLLECTION_NAME = '';
-
     protected Collection $collection;
 
     public function __construct(Database $database)
@@ -19,17 +16,20 @@ abstract class AbstractRepository
         $this->collection = $database->selectCollection($this->getCollectionName());
     }
 
+    public function findOne(ObjectIdInterface $objectId): \stdClass
+    {
+        return $this->getCollection()->findOne(
+            ['_id' => $objectId],
+            ['typeMap' => $this->getObjectType()]
+        );
+    }
+
     public function getCollection(): Collection
     {
         return $this->collection;
     }
 
-    protected function getCollectionName(): string
-    {
-        if (empty(static::COLLECTION_NAME)) {
-            throw new UnexpectedValueException("");
-        }
-        return static::COLLECTION_NAME;
-    }
+    abstract protected function getCollectionName(): string;
 
+    abstract protected function getObjectType(): string;
 }
