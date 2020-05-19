@@ -8,12 +8,18 @@ use MongoDB\UpdateResult;
 
 class FeedRepository extends AbstractRepository
 {
-    public function get(ObjectIdInterface $objectId): ? Feed
+
+    public function findOne(ObjectIdInterface $objectId): ? Feed
     {
-        $object = $this->findOne($objectId);
-        if ($object instanceof Feed) {
-            return $object;
+        $feed = $this->getCollection()->findOne(
+            ['_id' => $objectId],
+            ['typeMap' => ['root' => Feed::class]]
+        );
+
+        if ($feed instanceof Feed) {
+            return $feed;
         }
+
         return null;
     }
 
@@ -21,7 +27,7 @@ class FeedRepository extends AbstractRepository
     {
         return $this->getCollection()->updateOne(
             ['url' => $feed->getLink()],
-            ['$set' => ['url' => $feed->getLink()]],
+            ['$set' => $feed],
             ['upsert' => true]
         );
     }
@@ -31,8 +37,4 @@ class FeedRepository extends AbstractRepository
         return 'feeds';
     }
 
-    protected function getObjectType(): string
-    {
-        return Feed::class;
-    }
 }

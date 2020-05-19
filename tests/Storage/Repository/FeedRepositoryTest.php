@@ -6,6 +6,7 @@ namespace FeedIo\Storage\Tests\Repository;
 use FeedIo\Storage\Entity\Feed;
 use FeedIo\Storage\Repository\FeedRepository;
 use MongoDB\Client;
+use MongoDB\Database;
 use PHPUnit\Framework\TestCase;
 
 class FeedRepositoryTest extends TestCase
@@ -23,19 +24,33 @@ class FeedRepositoryTest extends TestCase
     {
         $feedRepository = $this->getRepository();
         $feed = new Feed();
-        $feed->setLink('http://some-feed.com');
+        $feed->setLink('http://some-feed.com/feed.atom');
         $feed->setLastModified(new \DateTime());
 
         $updateResult = $feedRepository->save($feed);
         $this->assertEquals(1, $updateResult->getUpsertedCount());
         $this->assertNotNull($updateResult->getUpsertedId());
-        //$feedRepository->get($updateResult->getUpsertedId());
+        $feedFromDb = $feedRepository->findOne($updateResult->getUpsertedId());
+        $this->assertEquals('http://some-feed.com/feed.atom', $feedFromDb->getLink());
+        $this->assertEquals('//some-feed.com', $feedFromDb->getHost());
+
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $this->getDatabase()->dropCollection('feeds');
     }
 
     private function getRepository(): FeedRepository
     {
+        return new FeedRepository($this->getDatabase());
+    }
+
+    private function getDatabase(): Database
+    {
         $client = new Client('mongodb://mongo:27017');
-        $database = $client->selectDatabase('feed-io-test');
-        return new FeedRepository($database);
+        return $client->selectDatabase('feed-io-test');
     }
 }
