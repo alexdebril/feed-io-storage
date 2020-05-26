@@ -8,7 +8,6 @@ use MongoDB\UpdateResult;
 
 class FeedRepository extends AbstractRepository
 {
-
     public function findOne(ObjectIdInterface $objectId): ? Feed
     {
         $feed = $this->getCollection()->findOne(
@@ -36,5 +35,4 @@ class FeedRepository extends AbstractRepository
     {
         return 'feeds';
     }
-
 }

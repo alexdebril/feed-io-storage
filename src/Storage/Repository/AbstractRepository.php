@@ -21,5 +21,4 @@ abstract class AbstractRepository
     }
 
     abstract protected function getCollectionName(): string;
-
 }

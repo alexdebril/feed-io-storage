@@ -11,9 +11,7 @@ use MongoDB\BSON\UTCDateTime;
 
 class Feed extends BaseFeed implements Serializable, Unserializable
 {
-
     protected ObjectId $id;
-
 
     public function __construct()
     {
@@ -32,6 +30,9 @@ class Feed extends BaseFeed implements Serializable, Unserializable
         $this->id = $id;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function bsonSerialize(): array
     {
         $properties = get_object_vars($this);
@@ -49,7 +50,10 @@ class Feed extends BaseFeed implements Serializable, Unserializable
         return $properties;
     }
 
-    public function bsonUnserialize(array $data)
+    /**
+     * @param array<mixed> $data
+     */
+    public function bsonUnserialize(array $data): void
     {
         $this->setId($data['_id']);
         if ($data['lastModified'] instanceof UTCDateTime) {
