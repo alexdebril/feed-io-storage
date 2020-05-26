@@ -15,5 +15,9 @@
     "autoload": {
         "psr-4": {"FeedIo\\Storage\\": "src/Storage"}
     },
+    "scripts": {
+        "src:cs-fix": "./vendor/bin/php-cs-fixer fix src/",
+        "src:stan": "./vendor/bin/phpstan analyse --level 7 src/"
+    },
     "license": "MIT"
 }
