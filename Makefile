@@ -9,8 +9,13 @@ stop:
 	docker-compose down
 
 test:
-	docker-compose run unit-test vendor/bin/phpunit
+	docker-compose run unit-test composer src:test
 
 update:
 	docker-compose run unit-test composer update
 
+lint:
+	docker-compose run unit-test composer src:lint
+
+stan:
+	docker-compose run unit-test composer src:stan

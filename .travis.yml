@@ -9,6 +9,8 @@ before_script:
 
 script:
   - make test
+  - make lint
+  - make stan
 
 after_script:
   - make stop
