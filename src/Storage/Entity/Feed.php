@@ -4,6 +4,8 @@
 namespace FeedIo\Storage\Entity;
 
 use FeedIo\Feed as BaseFeed;
+use FeedIo\Reader\Result;
+use FeedIo\Storage\Entity\Feed\Status;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Serializable;
 use MongoDB\BSON\Unserializable;
@@ -12,6 +14,10 @@ use MongoDB\BSON\UTCDateTime;
 class Feed extends BaseFeed implements Serializable, Unserializable
 {
     protected ObjectId $id;
+
+    protected Status $status;
+
+    protected \DateTime $nextUpdate;
 
     public function __construct()
     {
@@ -28,6 +34,11 @@ class Feed extends BaseFeed implements Serializable, Unserializable
     public function setId(ObjectId $id): void
     {
         $this->id = $id;
+    }
+
+    public function setResult(Result $result): void
+    {
+        $this->nextUpdate = $result->getNextUpdate();
     }
 
     /**
