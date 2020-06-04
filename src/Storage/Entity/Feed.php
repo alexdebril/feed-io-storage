@@ -22,6 +22,8 @@ class Feed extends BaseFeed implements Serializable, Unserializable
     public function __construct()
     {
         $this->id = new ObjectId();
+        $this->nextUpdate = new \DateTime();
+        $this->setStatus(new Status(Status::PENDING));
 
         parent::__construct();
     }
@@ -39,6 +41,22 @@ class Feed extends BaseFeed implements Serializable, Unserializable
     public function setResult(Result $result): void
     {
         $this->nextUpdate = $result->getNextUpdate();
+    }
+
+    /**
+     * @return Status
+     */
+    public function getStatus(): Status
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param Status $status
+     */
+    public function setStatus(Status $status): void
+    {
+        $this->status = $status;
     }
 
     /**
@@ -70,12 +88,16 @@ class Feed extends BaseFeed implements Serializable, Unserializable
         if ($data['lastModified'] instanceof UTCDateTime) {
             $this->setLastModified($data['lastModified']->toDateTime());
         }
+        if ($data['nextUpdate'] instanceof UTCDateTime) {
+            $this->nextUpdate ;
+        }
         $this->setTitle($data['title']);
         $this->setLink($data['link']);
         $this->setUrl($data['url']);
         $this->setDescription($data['description']);
         $this->setPublicId($data['publicId']);
         $this->setLanguage($data['language']);
+        $this->setStatus(new Status($data['status']));
 
         if (is_array($data['categories'])) {
             foreach ($data['categories'] as $category) {

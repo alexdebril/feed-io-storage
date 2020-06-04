@@ -35,6 +35,26 @@ class Status
         return $value === $this->getValue();
     }
 
+    public function isAccepted(): bool
+    {
+        return $this->is(self::ACCEPTED);
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->is(self::APPROVED);
+    }
+
+    public function isPending(): bool
+    {
+        return $this->is(self::PENDING);
+    }
+
+    public function isRejected(): bool
+    {
+        return $this->is(self::REJECTED);
+    }
+
     private function set(string $value): void
     {
         $values = (new \ReflectionClass(self::class))->getConstants();

@@ -4,6 +4,7 @@ namespace FeedIo\Storage\Repository;
 
 use FeedIo\Storage\Entity\Feed;
 use MongoDB\BSON\ObjectIdInterface;
+use MongoDB\Driver\Cursor;
 use MongoDB\UpdateResult;
 
 class FeedRepository extends AbstractRepository
@@ -20,6 +21,16 @@ class FeedRepository extends AbstractRepository
         }
 
         return null;
+    }
+
+    public function getFeedsToUpdate(): Cursor
+    {
+        $filter = [
+            'nextUpdate' => ['$gte' => new \DateTime()],
+            'status' => ['$ne' => Feed\Status::REJECTED],
+        ];
+
+        return $this->getCollection()->find($filter);
     }
 
     public function save(Feed $feed): UpdateResult
