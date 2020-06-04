@@ -4,6 +4,7 @@ namespace FeedIo\Storage\Repository;
 
 use FeedIo\Storage\Entity\Feed;
 use MongoDB\BSON\ObjectIdInterface;
+use MongoDB\BSON\UTCDateTime;
 use MongoDB\Driver\Cursor;
 use MongoDB\UpdateResult;
 
@@ -26,7 +27,7 @@ class FeedRepository extends AbstractRepository
     public function getFeedsToUpdate(): Cursor
     {
         $filter = [
-            'nextUpdate' => ['$gte' => new \DateTime()],
+            'nextUpdate' => ['$lte' => new UTCDateTime()],
             'status' => ['$ne' => Feed\Status::REJECTED],
         ];
 

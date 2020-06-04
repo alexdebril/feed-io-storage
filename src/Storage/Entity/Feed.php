@@ -38,22 +38,25 @@ class Feed extends BaseFeed implements Serializable, Unserializable
         $this->id = $id;
     }
 
-    public function setResult(Result $result): void
+    public function setNextUpdate(\DateTime $nextUpdate): Feed
     {
-        $this->nextUpdate = $result->getNextUpdate();
+        $this->nextUpdate = $nextUpdate;
+
+        return $this;
     }
 
-    /**
-     * @return Status
-     */
+    public function setResult(Result $result): Feed
+    {
+        $this->setNextUpdate($result->getNextUpdate());
+
+        return $this;
+    }
+
     public function getStatus(): Status
     {
         return $this->status;
     }
 
-    /**
-     * @param Status $status
-     */
     public function setStatus(Status $status): void
     {
         $this->status = $status;
@@ -75,6 +78,7 @@ class Feed extends BaseFeed implements Serializable, Unserializable
         }
 
         $properties['_id'] = $this->getId();
+        $properties['status'] = $this->getStatus()->getValue();
 
         return $properties;
     }
@@ -89,7 +93,7 @@ class Feed extends BaseFeed implements Serializable, Unserializable
             $this->setLastModified($data['lastModified']->toDateTime());
         }
         if ($data['nextUpdate'] instanceof UTCDateTime) {
-            $this->nextUpdate ;
+            $this->setNextUpdate($data['nextUpdate']->toDateTime());
         }
         $this->setTitle($data['title']);
         $this->setLink($data['link']);

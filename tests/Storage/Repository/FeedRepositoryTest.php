@@ -33,7 +33,21 @@ class FeedRepositoryTest extends TestCase
         $feedFromDb = $feedRepository->findOne($updateResult->getUpsertedId());
         $this->assertEquals('http://some-feed.com/feed.atom', $feedFromDb->getLink());
         $this->assertEquals('//some-feed.com', $feedFromDb->getHost());
+    }
 
+    public function testGetNexUpdate()
+    {
+        $feedRepository = $this->getRepository();
+        $feed = new Feed();
+        $feed->setLink('http://some-feed.com/feed.atom');
+        $feed->setStatus(new Feed\Status(Feed\Status::ACCEPTED));
+        $feed->setLastModified(new \DateTime());
+        $feed->setNextUpdate(new \DateTime('-1hour'));
+
+        $feedRepository->save($feed);
+
+        $cursor = $feedRepository->getFeedsToUpdate();
+        $this->assertCount(1, $cursor->toArray());
     }
 
     protected function tearDown(): void
