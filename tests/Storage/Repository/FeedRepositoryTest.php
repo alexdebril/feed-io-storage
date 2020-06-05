@@ -38,16 +38,38 @@ class FeedRepositoryTest extends TestCase
     public function testGetNexUpdate()
     {
         $feedRepository = $this->getRepository();
-        $feed = new Feed();
-        $feed->setLink('http://some-feed.com/feed.atom');
-        $feed->setStatus(new Feed\Status(Feed\Status::ACCEPTED));
-        $feed->setLastModified(new \DateTime());
-        $feed->setNextUpdate(new \DateTime('-1hour'));
+        $toUpdate = new Feed();
+        $toUpdate->setLink('http://to-update.com/feed.atom');
+        $toUpdate->setStatus(new Feed\Status(Feed\Status::ACCEPTED));
+        $toUpdate->setLastModified(new \DateTime());
+        $toUpdate->setNextUpdate(new \DateTime('-1hour'));
 
-        $feedRepository->save($feed);
+        $feedRepository->save($toUpdate);
+
+        $rejected = new Feed();
+        $rejected->setLink('http://rejected.com/feed.atom');
+        $rejected->setStatus(new Feed\Status(Feed\Status::REJECTED));
+        $rejected->setLastModified(new \DateTime());
+        $rejected->setNextUpdate(new \DateTime('-1hour'));
+
+        $feedRepository->save($rejected);
+
+        $notYet = new Feed();
+        $notYet->setLink('http://not-yet.com/feed.atom');
+        $notYet->setStatus(new Feed\Status(Feed\Status::ACCEPTED));
+        $notYet->setLastModified(new \DateTime());
+        $notYet->setNextUpdate(new \DateTime('+1hour'));
+
+        $feedRepository->save($notYet);
 
         $cursor = $feedRepository->getFeedsToUpdate();
-        $this->assertCount(1, $cursor->toArray());
+        $result = $cursor->toArray();
+        $this->assertCount(1, $result);
+        /** @var Feed $feed */
+        foreach ($result as $feed) {
+            $this->assertInstanceOf(Feed::class, $feed);
+            $this->assertEquals('http://to-update.com/feed.atom', $feed->getLink());
+        }
     }
 
     protected function tearDown(): void

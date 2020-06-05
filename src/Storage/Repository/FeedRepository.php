@@ -26,13 +26,15 @@ class FeedRepository extends AbstractRepository
 
     public function getFeedsToUpdate(): Cursor
     {
-        $filter = [
-            'nextUpdate' => ['$lte' => new UTCDateTime()],
-            'status' => ['$ne' => Feed\Status::REJECTED],
-        ];
-
-        return $this->getCollection()->find($filter);
+        return $this->getCollection()->find(
+            [
+                'nextUpdate' => ['$lte' => new UTCDateTime()],
+                'status' => ['$ne' => Feed\Status::REJECTED],
+            ],
+            ['typeMap' => ['root' => Feed::class]]
+        );
     }
+
 
     public function save(Feed $feed): UpdateResult
     {
