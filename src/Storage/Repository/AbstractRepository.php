@@ -20,5 +20,14 @@ abstract class AbstractRepository
         return $this->collection;
     }
 
+    public function createIndex(): void
+    {
+        $this->getCollection()->createIndexes(
+            $this->getIndexes()
+        );
+    }
+
     abstract protected function getCollectionName(): string;
+
+    abstract protected function getIndexes(): array;
 }

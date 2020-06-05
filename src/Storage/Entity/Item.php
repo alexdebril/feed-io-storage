@@ -3,57 +3,33 @@
 
 namespace FeedIo\Storage\Entity;
 
-use FeedIo\Feed as BaseFeed;
-use FeedIo\Reader\Result;
-use FeedIo\Storage\Entity\Feed\Status;
+use FeedIo\Feed\Item as BaseItem;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Serializable;
 use MongoDB\BSON\Unserializable;
 use MongoDB\BSON\UTCDateTime;
 
-class Feed extends BaseFeed implements Serializable, Unserializable
+class Item extends BaseItem implements Serializable, Unserializable
 {
     protected ?ObjectId $id;
 
-    protected Status $status;
-
-    protected \DateTime $nextUpdate;
-
-    public function __construct()
-    {
-        $this->nextUpdate = new \DateTime();
-        $this->setStatus(new Status(Status::PENDING));
-
-        parent::__construct();
-    }
+    protected ObjectId $feedId;
 
     public function getId(): ? ObjectId
     {
         return $this->id;
     }
 
-    public function setNextUpdate(\DateTime $nextUpdate): Feed
+    public function getFeedId(): ObjectId
     {
-        $this->nextUpdate = $nextUpdate;
+        return $this->feedId;
+    }
+
+    public function setFeedId(ObjectId $feedId): Item
+    {
+        $this->feedId = $feedId;
 
         return $this;
-    }
-
-    public function setResult(Result $result): Feed
-    {
-        $this->setNextUpdate($result->getNextUpdate());
-
-        return $this;
-    }
-
-    public function getStatus(): Status
-    {
-        return $this->status;
-    }
-
-    public function setStatus(Status $status): void
-    {
-        $this->status = $status;
     }
 
     /**
@@ -62,16 +38,12 @@ class Feed extends BaseFeed implements Serializable, Unserializable
     public function bsonSerialize(): array
     {
         $properties = get_object_vars($this);
-        unset($properties['items']);
-        unset($properties['elements']);
 
         foreach ($properties as $name => $property) {
             if ($property instanceof \DateTime) {
                 $properties[$name] = new UTCDateTime($property);
             }
         }
-
-        $properties['status'] = $this->getStatus()->getValue();
 
         return $properties;
     }
@@ -82,19 +54,14 @@ class Feed extends BaseFeed implements Serializable, Unserializable
     public function bsonUnserialize(array $data): void
     {
         $this->id = $data['_id'];
+        $this->setFeedId($data['feedId']);
         if ($data['lastModified'] instanceof UTCDateTime) {
             $this->setLastModified($data['lastModified']->toDateTime());
         }
-        if ($data['nextUpdate'] instanceof UTCDateTime) {
-            $this->setNextUpdate($data['nextUpdate']->toDateTime());
-        }
         $this->setTitle($data['title']);
         $this->setLink($data['link']);
-        $this->setUrl($data['url']);
         $this->setDescription($data['description']);
         $this->setPublicId($data['publicId']);
-        $this->setLanguage($data['language']);
-        $this->setStatus(new Status($data['status']));
 
         if (is_array($data['categories'])) {
             foreach ($data['categories'] as $category) {
