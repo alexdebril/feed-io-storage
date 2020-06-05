@@ -15,6 +15,9 @@
     "autoload": {
         "psr-4": {"FeedIo\\Storage\\": "src/Storage"}
     },
+    "autoload-dev": {
+        "psr-4": {"FeedIo\\Storage\\Tests\\": "tests/Storage"}
+    },
     "scripts": {
         "src:test": "./vendor/bin/phpunit",
         "src:cs-fix": "./vendor/bin/php-cs-fixer fix src/",
