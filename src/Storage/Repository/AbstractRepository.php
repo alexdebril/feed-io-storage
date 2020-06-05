@@ -29,5 +29,8 @@ abstract class AbstractRepository
 
     abstract protected function getCollectionName(): string;
 
+    /**
+     * @return array<array>
+     */
     abstract protected function getIndexes(): array;
 }

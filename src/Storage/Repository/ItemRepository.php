@@ -23,6 +23,12 @@ class ItemRepository extends AbstractRepository
         return null;
     }
 
+    /**
+     * @param ObjectIdInterface $feedId
+     * @param int $start
+     * @param int $limit
+     * @return Cursor<Item>
+     */
     public function getItemsFromFeed(ObjectIdInterface $feedId, int $start = 0, int $limit = 10): Cursor
     {
         return $this->getCollection()->find(
@@ -44,6 +50,9 @@ class ItemRepository extends AbstractRepository
         return $this->getCollection()->insertOne($item);
     }
 
+    /**
+     * @return array<array>
+     */
     protected function getIndexes(): array
     {
         return [

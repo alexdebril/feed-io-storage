@@ -24,6 +24,9 @@ class FeedRepository extends AbstractRepository
         return null;
     }
 
+    /**
+     * @return Cursor<Feed>
+     */
     public function getFeedsToUpdate(): Cursor
     {
         return $this->getCollection()->find(
