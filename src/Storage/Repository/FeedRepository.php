@@ -25,7 +25,7 @@ class FeedRepository extends AbstractRepository
     }
 
     /**
-     * @param array $statuses
+     * @param array<string> $statuses
      * @return Cursor<Feed>
      */
     public function getFeedsToUpdate(array $statuses = [Feed\Status::ACCEPTED, Feed\Status::APPROVED]): Cursor
