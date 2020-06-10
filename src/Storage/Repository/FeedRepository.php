@@ -25,14 +25,15 @@ class FeedRepository extends AbstractRepository
     }
 
     /**
+     * @param array $statuses
      * @return Cursor<Feed>
      */
-    public function getFeedsToUpdate(): Cursor
+    public function getFeedsToUpdate(array $statuses = [Feed\Status::ACCEPTED, Feed\Status::APPROVED]): Cursor
     {
         return $this->getCollection()->find(
             [
                 'nextUpdate' => ['$lte' => new UTCDateTime()],
-                'status' => ['$ne' => Feed\Status::REJECTED],
+                'status' => ['$in' => $statuses],
             ],
             ['typeMap' => ['root' => Feed::class]]
         );

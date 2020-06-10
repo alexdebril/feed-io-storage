@@ -4,6 +4,7 @@
 namespace FeedIo\Storage\Entity;
 
 use FeedIo\Feed as BaseFeed;
+use FeedIo\Feed\ItemInterface;
 use FeedIo\Reader\Result;
 use FeedIo\Storage\Entity\Feed\Status;
 use MongoDB\BSON\ObjectId;
@@ -30,6 +31,11 @@ class Feed extends BaseFeed implements Serializable, Unserializable
     public function getId(): ? ObjectId
     {
         return $this->id;
+    }
+
+    public function newItem(): ItemInterface
+    {
+        return new Item();
     }
 
     public function setNextUpdate(\DateTime $nextUpdate): Feed
