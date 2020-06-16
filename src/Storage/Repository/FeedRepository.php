@@ -39,6 +39,17 @@ class FeedRepository extends AbstractRepository
         );
     }
 
+    /**
+     * @param string $status
+     * @return Cursor<Feed>
+     */
+    public function getFeedsByStatus(string $status): Cursor
+    {
+        return $this->getCollection()->find(
+            ['status' => $status],
+            ['typeMap' => ['root' => Feed::class]]
+        );
+    }
 
     public function save(Feed $feed): UpdateResult
     {
