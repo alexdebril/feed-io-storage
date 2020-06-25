@@ -5,11 +5,25 @@ namespace FeedIo\Storage\Entity;
 
 class Translations
 {
-    private array $data;
+    protected string $default;
 
-    public function set(string $lang, string $translation): void
+    protected array $data;
+
+    public function __construct(string $default, array $data = [])
+    {
+        $this->default = $default;
+        $this->data = $data;
+    }
+
+    public function getDefault(): string
+    {
+        return $this->default;
+    }
+
+    public function set(string $lang, string $translation): Translations
     {
         $this->data[$lang] = $translation;
+        return $this;
     }
 
     public function get(string $lang): ?string
@@ -22,6 +36,9 @@ class Translations
 
     public function toArray(): array
     {
-        return $this->data;
+        return [
+            'default' => $this->default,
+            'translations' => $this->data,
+        ];
     }
 }

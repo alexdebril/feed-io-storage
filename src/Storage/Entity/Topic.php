@@ -9,11 +9,11 @@ use MongoDB\BSON\Unserializable;
 
 class Topic implements Serializable, Unserializable
 {
-    use Translateable;
-
     protected ?ObjectId $id;
 
     protected string $slug;
+
+    protected Translations $name;
 
     public function getId(): ?ObjectId
     {
@@ -31,19 +31,34 @@ class Topic implements Serializable, Unserializable
         return $this;
     }
 
+    public function getName(): Translations
+    {
+        return $this->name;
+    }
+
+    public function setName(Translations $name): Topic
+    {
+        $this->name = $name;
+        return $this;
+    }
+
     public function bsonSerialize(): array
     {
         return [
             'slug' => $this->getSlug(),
-            'translations' => $this->translations->toArray(),
+            'name' => $this->name->toArray(),
         ];
     }
 
-    public function bsonUnserialize(array $data)
+    public function bsonUnserialize(array $data): void
     {
+        $this->id = $data['_id'];
         $this->setSlug($data['slug']);
-
+        $name = new Translations($data['name']->default);
+        foreach ($data['name']->translations as $lang => $translation) {
+            $name->set($lang, $translation);
+        }
+        $this->setName($name);
     }
-
 
 }
