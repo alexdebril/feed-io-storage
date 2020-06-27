@@ -15,7 +15,7 @@ class Translations
     /**
      * Translations constructor.
      * @param string $default
-     * @param array $data<string>
+     * @param array<string> $data
      */
     public function __construct(string $default, array $data = [])
     {
