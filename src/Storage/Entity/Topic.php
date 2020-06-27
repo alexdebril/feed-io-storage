@@ -42,6 +42,9 @@ class Topic implements Serializable, Unserializable
         return $this;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function bsonSerialize(): array
     {
         return [
@@ -50,6 +53,9 @@ class Topic implements Serializable, Unserializable
         ];
     }
 
+    /**
+     * @param array<mixed> $data
+     */
     public function bsonUnserialize(array $data): void
     {
         $this->id = $data['_id'];

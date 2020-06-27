@@ -7,8 +7,16 @@ class Translations
 {
     protected string $default;
 
+    /**
+     * @var array<string>
+     */
     protected array $data;
 
+    /**
+     * Translations constructor.
+     * @param string $default
+     * @param array $data<string>
+     */
     public function __construct(string $default, array $data = [])
     {
         $this->default = $default;
@@ -34,6 +42,9 @@ class Translations
         return $this->data[$lang];
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array
     {
         return [
