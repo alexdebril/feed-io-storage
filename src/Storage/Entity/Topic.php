@@ -66,5 +66,4 @@ class Topic implements Serializable, Unserializable
         }
         $this->setName($name);
     }
-
 }
