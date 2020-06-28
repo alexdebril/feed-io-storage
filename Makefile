@@ -17,5 +17,8 @@ update:
 lint:
 	docker-compose run unit-test composer src:lint
 
+cs-fix:
+	docker-compose run unit-test composer src:cs-fix
+
 stan:
 	docker-compose run unit-test composer src:stan

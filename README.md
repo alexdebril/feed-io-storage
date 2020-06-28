@@ -1,5 +1,7 @@
 # feed-io-storage
 
+[![Build Status](https://travis-ci.org/alexdebril/feed-io-storage.svg?branch=master)](https://travis-ci.org/alexdebril/feed-io-storage)
+
 Store objects produced through feed-io:
 
 - feeds

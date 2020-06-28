@@ -20,6 +20,10 @@ class Feed extends BaseFeed implements Serializable, Unserializable
 
     protected \DateTime $nextUpdate;
 
+    protected Topic $topic;
+
+    protected string $slug;
+
     public function __construct()
     {
         $this->nextUpdate = new \DateTime();
@@ -60,6 +64,28 @@ class Feed extends BaseFeed implements Serializable, Unserializable
     public function setStatus(Status $status): void
     {
         $this->status = $status;
+    }
+
+    public function getTopic(): Topic
+    {
+        return $this->topic;
+    }
+
+    public function setTopic(Topic $topic): Feed
+    {
+        $this->topic = $topic;
+        return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): Feed
+    {
+        $this->slug = $slug;
+        return $this;
     }
 
     /**
