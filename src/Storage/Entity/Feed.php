@@ -20,7 +20,7 @@ class Feed extends BaseFeed implements Serializable, Unserializable
 
     protected \DateTime $nextUpdate;
 
-    protected ?ObjectId $topicId;
+    protected ?ObjectId $topicId = null;
 
     protected ?string $slug;
 
@@ -137,7 +137,7 @@ class Feed extends BaseFeed implements Serializable, Unserializable
     public function bsonUnserialize(array $data): void
     {
         $this->id = $data['_id'];
-        if ($data['topicId'] instanceof ObjectId) {
+        if (isset($data['topicId']) && $data['topicId'] instanceof ObjectId) {
             $this->setTopicId($data['topicId']);
         }
         if ($data['lastModified'] instanceof UTCDateTime) {
