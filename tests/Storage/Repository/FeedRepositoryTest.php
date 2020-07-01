@@ -27,13 +27,14 @@ class FeedRepositoryTest extends TestCase
         $feed->setUrl('http://some-feed.com/feed.atom');
         $feed->setLink('http://some-feed.com');
         $feed->setLastModified(new \DateTime());
-
+        $feed->setChecks(['uniqId' => true, 'normal_flow' => false]);
         $updateResult = $feedRepository->save($feed);
         $this->assertEquals(1, $updateResult->getUpsertedCount());
         $this->assertNotNull($updateResult->getUpsertedId());
         $feedFromDb = $feedRepository->findOne($updateResult->getUpsertedId());
         $this->assertEquals('http://some-feed.com/feed.atom', $feedFromDb->getUrl());
         $this->assertEquals('//some-feed.com', $feedFromDb->getHost());
+        $this->assertEquals(['uniqId' => true, 'normal_flow' => false], $feed->getChecks());
     }
 
     public function testGetNexUpdate()

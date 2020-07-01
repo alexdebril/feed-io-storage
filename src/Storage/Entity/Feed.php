@@ -20,9 +20,14 @@ class Feed extends BaseFeed implements Serializable, Unserializable
 
     protected \DateTime $nextUpdate;
 
-    protected Topic $topic;
+    protected ?ObjectId $topicId;
 
-    protected string $slug;
+    protected ?string $slug;
+
+    /**
+     * @var array<mixed>
+     */
+    protected array $checks = [];
 
     public function __construct()
     {
@@ -56,6 +61,24 @@ class Feed extends BaseFeed implements Serializable, Unserializable
         return $this;
     }
 
+    /**
+     * @return array<mixed>
+     */
+    public function getChecks(): array
+    {
+        return $this->checks;
+    }
+
+    /**
+     * @param array<mixed> $checks
+     * @return $this
+     */
+    public function setChecks(array $checks): Feed
+    {
+        $this->checks = $checks;
+        return $this;
+    }
+
     public function getStatus(): Status
     {
         return $this->status;
@@ -66,23 +89,23 @@ class Feed extends BaseFeed implements Serializable, Unserializable
         $this->status = $status;
     }
 
-    public function getTopic(): Topic
+    public function getTopicId(): ?ObjectId
     {
-        return $this->topic;
+        return $this->topicId;
     }
 
-    public function setTopic(Topic $topic): Feed
+    public function setTopicId(ObjectId $topicId): Feed
     {
-        $this->topic = $topic;
+        $this->topicId = $topicId;
         return $this;
     }
 
-    public function getSlug(): string
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
 
-    public function setSlug(string $slug): Feed
+    public function setSlug(string $slug = null): Feed
     {
         $this->slug = $slug;
         return $this;
@@ -114,6 +137,9 @@ class Feed extends BaseFeed implements Serializable, Unserializable
     public function bsonUnserialize(array $data): void
     {
         $this->id = $data['_id'];
+        if ($data['topicId'] instanceof ObjectId) {
+            $this->setTopicId($data['topicId']);
+        }
         if ($data['lastModified'] instanceof UTCDateTime) {
             $this->setLastModified($data['lastModified']->toDateTime());
         }
@@ -123,6 +149,8 @@ class Feed extends BaseFeed implements Serializable, Unserializable
         $this->setTitle($data['title']);
         $this->setLink($data['link']);
         $this->setUrl($data['url']);
+        $this->setSlug($data['slug']);
+        $this->setChecks((array) $data['checks']);
         $this->setDescription($data['description']);
         $this->setPublicId($data['publicId']);
         $this->setLanguage($data['language']);
