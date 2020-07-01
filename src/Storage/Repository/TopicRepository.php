@@ -23,6 +23,9 @@ class TopicRepository extends AbstractRepository
         return null;
     }
 
+    /**
+     * @return Cursor<Topic>
+     */
     public function getTopics(): Cursor
     {
         return $this->getCollection()->find([],
