@@ -9,7 +9,7 @@ use MongoDB\UpdateResult;
 
 class TopicRepository extends AbstractRepository
 {
-    public function findOne(ObjectIdInterface $objectId): ? Topic
+    public function findOne(ObjectIdInterface $objectId): ?Topic
     {
         $topic = $this->getCollection()->findOne(
             ['_id' => $objectId],
