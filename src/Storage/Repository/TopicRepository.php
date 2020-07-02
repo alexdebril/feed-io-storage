@@ -28,7 +28,8 @@ class TopicRepository extends AbstractRepository
      */
     public function getTopics(): Cursor
     {
-        return $this->getCollection()->find([],
+        return $this->getCollection()->find(
+            [],
             ['typeMap' => ['root' => Topic::class]]
         );
     }
