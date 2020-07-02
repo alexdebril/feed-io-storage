@@ -4,11 +4,12 @@ namespace FeedIo\Storage\Repository;
 
 use FeedIo\Storage\Entity\Topic;
 use MongoDB\BSON\ObjectIdInterface;
+use MongoDB\Driver\Cursor;
 use MongoDB\UpdateResult;
 
 class TopicRepository extends AbstractRepository
 {
-    public function findOne(ObjectIdInterface $objectId): ? Topic
+    public function findOne(ObjectIdInterface $objectId): ?Topic
     {
         $topic = $this->getCollection()->findOne(
             ['_id' => $objectId],
@@ -20,6 +21,17 @@ class TopicRepository extends AbstractRepository
         }
 
         return null;
+    }
+
+    /**
+     * @return Cursor<Topic>
+     */
+    public function getTopics(): Cursor
+    {
+        return $this->getCollection()->find(
+            [],
+            ['typeMap' => ['root' => Topic::class]]
+        );
     }
 
     public function save(Topic $topic): UpdateResult
