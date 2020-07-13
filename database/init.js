@@ -9,4 +9,5 @@ if ( cols.length === 0) {
     db.createCollection("items");
     db.items.createIndex({"lastModified": -1, "feedId": 1});
     db.items.createIndex({"publicId": 1}, {"unique": 1});
+    db.items.createIndex({"description": "text"});
 }
