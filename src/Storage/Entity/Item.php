@@ -15,6 +15,8 @@ class Item extends BaseItem implements Serializable, Unserializable
 
     protected ObjectId $feedId;
 
+    protected ?string $language;
+
     public function getId(): ? ObjectId
     {
         return $this->id;
@@ -28,6 +30,18 @@ class Item extends BaseItem implements Serializable, Unserializable
     public function setFeedId(ObjectId $feedId): Item
     {
         $this->feedId = $feedId;
+
+        return $this;
+    }
+
+    public function getLanguage(): ?string
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(?string $language): Item
+    {
+        $this->language = $language;
 
         return $this;
     }
@@ -58,6 +72,7 @@ class Item extends BaseItem implements Serializable, Unserializable
         if ($data['lastModified'] instanceof UTCDateTime) {
             $this->setLastModified($data['lastModified']->toDateTime());
         }
+        $this->setLanguage($data['language']);
         $this->setTitle($data['title']);
         $this->setLink($data['link']);
         $this->setDescription($data['description']);
