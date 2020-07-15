@@ -137,6 +137,7 @@ class Feed extends BaseFeed implements Serializable, Unserializable
     public function bsonUnserialize(array $data): void
     {
         $this->id = $data['_id'];
+        parent::__construct();
         if (isset($data['topicId']) && $data['topicId'] instanceof ObjectId) {
             $this->setTopicId($data['topicId']);
         }
