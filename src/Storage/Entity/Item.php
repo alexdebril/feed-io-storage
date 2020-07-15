@@ -38,6 +38,7 @@ class Item extends BaseItem implements Serializable, Unserializable
     public function bsonSerialize(): array
     {
         $properties = get_object_vars($this);
+        unset($properties['id']);
 
         foreach ($properties as $name => $property) {
             if ($property instanceof \DateTime) {

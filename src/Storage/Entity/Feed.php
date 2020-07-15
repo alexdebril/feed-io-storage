@@ -118,6 +118,7 @@ class Feed extends BaseFeed implements Serializable, Unserializable
     {
         $properties = get_object_vars($this);
         unset($properties['items']);
+        unset($properties['id']);
 
         foreach ($properties as $name => $property) {
             if ($property instanceof \DateTime) {
