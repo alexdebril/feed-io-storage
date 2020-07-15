@@ -28,12 +28,14 @@ class ItemRepositoryTest extends TestCase
         $item->setPublicId('http://some-feed.com/feed.atom');
         $item->setLastModified(new \DateTime());
         $item->setFeedId(new ObjectId());
+        $item->setLanguage('english');
 
         $insertResult = $itemRepository->save($item);
         $this->assertEquals(1, $insertResult->getInsertedCount());
         $this->assertNotNull($insertResult->getInsertedId());
         $itemFromDb = $itemRepository->findOne($insertResult->getInsertedId());
         $this->assertEquals('http://some-feed.com/feed.atom', $itemFromDb->getPublicId());
+        $this->assertEquals('english', $itemFromDb->getLanguage());
     }
 
     public function testGetItems()

@@ -13,6 +13,8 @@ class Topic implements Serializable, Unserializable
 
     protected string $slug;
 
+    protected ?string $image = null;
+
     protected Translations $name;
 
     public function getId(): ?ObjectId
@@ -28,6 +30,17 @@ class Topic implements Serializable, Unserializable
     public function setSlug(string $slug): Topic
     {
         $this->slug = $slug;
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): Topic
+    {
+        $this->image = $image;
         return $this;
     }
 
@@ -49,6 +62,7 @@ class Topic implements Serializable, Unserializable
     {
         return [
             'slug' => $this->getSlug(),
+            'image' => $this->getImage(),
             'name' => $this->name->toArray(),
         ];
     }
@@ -65,5 +79,6 @@ class Topic implements Serializable, Unserializable
             $name->set($lang, $translation);
         }
         $this->setName($name);
+        $this->setImage($data['image']);
     }
 }
