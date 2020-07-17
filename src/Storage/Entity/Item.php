@@ -17,6 +17,8 @@ class Item extends BaseItem implements Serializable, Unserializable
 
     protected ?string $language;
 
+    protected ?string $thumbnail;
+
     public function getId(): ? ObjectId
     {
         return $this->id;
@@ -43,6 +45,17 @@ class Item extends BaseItem implements Serializable, Unserializable
     {
         $this->language = $language;
 
+        return $this;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(?string $thumbnail): Item
+    {
+        $this->thumbnail = $thumbnail;
         return $this;
     }
 
@@ -78,6 +91,7 @@ class Item extends BaseItem implements Serializable, Unserializable
         $this->setLink($data['link']);
         $this->setDescription($data['description']);
         $this->setPublicId($data['publicId']);
+        $this->setThumbnail($data['thumbnail']);
 
         if (is_array($data['categories'])) {
             foreach ($data['categories'] as $category) {
