@@ -51,6 +51,13 @@ class FeedRepository extends AbstractRepository
         );
     }
 
+    /**
+     * @param ObjectIdInterface $topicId
+     * @param string $language
+     * @param int $start
+     * @param int $limit
+     * @return \Traversable<array>
+     */
     public function getItemsFromTopic(ObjectIdInterface $topicId, string $language, int $start = 0, int $limit = 10): \Traversable
     {
         return $this->getCollection()->aggregate([
@@ -66,11 +73,13 @@ class FeedRepository extends AbstractRepository
             ]],
             ['$unwind' => '$item'],
             ['$project' => [
+                '_id' => 1,
                 'language' => 1,
                 'title' => 1,
                 'url' => 1,
                 'slug' => 1,
                 'topicId' => 1,
+                'item._id' => 1,
                 'item.description' => 1,
                 'item.title' => 1,
                 'item.url' => 1,
