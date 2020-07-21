@@ -51,6 +51,39 @@ class FeedRepository extends AbstractRepository
         );
     }
 
+    public function getItemsFromTopic(ObjectIdInterface $topicId, string $language, int $start = 0, int $limit = 10): \Traversable
+    {
+        return $this->getCollection()->aggregate([
+            ['$match' => [
+                'language' => $language,
+                'topicId' => $topicId,
+            ]],
+            ['$lookup' => [
+                'as' => 'item',
+                'from' => 'items',
+                'localField' => '_id',
+                'foreignField' => 'feedId',
+            ]],
+            ['$unwind' => '$item'],
+            ['$project' => [
+                'language' => 1,
+                'title' => 1,
+                'url' => 1,
+                'slug' => 1,
+                'topicId' => 1,
+                'item.description' => 1,
+                'item.title' => 1,
+                'item.url' => 1,
+                'item.publicId' => 1,
+                'item.thumbnail' => 1,
+                'item.lastModified' => 1,
+            ]],
+            ['$sort' => ['item.lastModified' => -1]],
+            ['$skip' => $start],
+            ['$limit' => $limit],
+        ]);
+    }
+
     public function save(Feed $feed): UpdateResult
     {
         if (is_null($feed->getUrl())) {
@@ -67,6 +100,7 @@ class FeedRepository extends AbstractRepository
     {
         return [
             ['key' => ['nextUpdate' => 1, 'status' => 1]],
+            ['key' => ['language' => 1, 'topicId' => 1]],
             ['key' => ['url' => 1], 'unique' => true]
         ];
     }
