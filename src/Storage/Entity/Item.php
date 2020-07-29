@@ -82,16 +82,17 @@ class Item extends BaseItem implements Serializable, Unserializable
     public function bsonUnserialize(array $data): void
     {
         $this->id = $data['_id'];
+        parent::__construct();
         $this->setFeedId($data['feedId']);
         if ($data['lastModified'] instanceof UTCDateTime) {
             $this->setLastModified($data['lastModified']->toDateTime());
         }
-        $this->setLanguage($data['language']);
+        $this->setLanguage($data['language'] ?? null);
         $this->setTitle($data['title']);
         $this->setLink($data['link']);
         $this->setDescription($data['description']);
         $this->setPublicId($data['publicId']);
-        $this->setThumbnail($data['thumbnail']);
+        $this->setThumbnail($data['thumbnail'] ?? null);
 
         if (is_array($data['categories'])) {
             foreach ($data['categories'] as $category) {
