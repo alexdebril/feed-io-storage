@@ -31,10 +31,15 @@ class TopicRepositoryTest extends TestCase
         $name->set('en', 'News')->set('fr', 'actualités');
         $topic->setSlug('slug-string')->setName($name);
         $result = $topicRepository->save($topic);
+        $this->assertEquals(1, $result->getUpsertedCount());
         $newTopic = $topicRepository->findOne($result->getUpsertedId());
         $this->assertEquals('slug-string', $newTopic->getSlug());
         $this->assertInstanceOf('\\FeedIo\\Storage\\Entity\\Translations', $newTopic->getName());
         $this->assertEquals('News', $newTopic->getName()->get('en'));
+
+        $topic->setImage('https://an-image');
+        $updateResult = $topicRepository->save($topic);
+        $this->assertEquals(1, $updateResult->getModifiedCount());
     }
 
     protected function tearDown(): void

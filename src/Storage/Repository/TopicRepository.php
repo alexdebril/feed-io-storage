@@ -37,7 +37,7 @@ class TopicRepository extends AbstractRepository
     public function save(Topic $topic): UpdateResult
     {
         return $this->getCollection()->updateOne(
-            ['name.default' => $topic->getName()],
+            ['slug' => $topic->getSlug()],
             ['$set' => $topic],
             ['upsert' => true]
         );
